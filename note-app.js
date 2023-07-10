@@ -310,7 +310,7 @@ function updatenote(data) {
   window.location.reload();
 }
 
-function editNote(data) {
+function editNote(data){
   updateModalContent.value = data.description;
   updateModalTitle.value = data.title;
   updateNoteType.value = data.category;
