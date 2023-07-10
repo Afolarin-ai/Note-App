@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="search">
+        <i class="fas fa-search search-icon"></i>
+          <input
+          class="search-input"
+          type="text"
+          name="search-notes"
+          id="search-notes-inp"
+          placeholder="           Search notes...";
+          value = "";
+          />
+      </div>
+      <div class="below-input">
+        <div class="tab-container">
+          <button class="all">All</button>
+          <button class="tab">Home</button>
+          <button class="tab">Work</button>
+          <button class="tab">Personal</button>
+        </div>
+        <button class="add-note-button">+ ADD NOTE</button>
+      </div>
+      <div class="empty-notes">
+        <h1>You don't have any notes</h1>
+        <img
+          src="assets/add-note-illustration.svg"
+          alt="add-note-illustration"
+        />
+      </div>
+      <div class="content">
+        <div class="note">
+          <p class="note-content"></p>
+          <p class="date"></p>
+        </div>
+      </div>
+      <div class="add-modal-container">
+        <div class="add-note-modal">
+          <h1 class="add-note">Add note</h1>
+          <div class="split">
+            <input
+              class="add-note-input"
+              type="text"
+              name="note-title"
+              id=""
+              placeholder="Add title..."
+            />
+            <div class="dropdown">
+              <select class="add-note-type">
+                <option selected>Select Category</option>
+                <option value="home">Home</option>
+                <option value="work">Work</option>
+                <option value="personal">Personal</option>
+                <default>Select Category</default>
+              </select>
+            </div>
+          </div>
+
+          <textarea
+            class="description"
+            name=""
+            id=""
+            cols="50"
+            rows="15"
+            placeholder="Add description..."
+          ></textarea>
+          <div class="add-cancel">
+            <button class="add-modal-cancel">CANCEL</button>
+            <button class="add-modal-add">ADD</button>
+          </div>
+        </div>
+      </div>
+      <div class="update-modal-container">
+        <div class="update-note-modal">
+          <h1 class="update-note">Update note</h1>
+          <hr />
+          <div class="split">
+            <input
+              class="update-note-input"
+              type="text"
+              name=""
+              id=""
+              placeholder="Add title..."
+            />
+            <div class="dropdown">
+              <select class="update-note-type">
+                <label>Select Category</label>
+                <option value="home">Home</option>
+                <option value="work">Work</option>
+                <option value="personal">Personal</option>
+                <default>Select Category</default>
+              </select>
+            </div>
+          </div>
+
+          <textarea
+            class="update-note-description"
+            name=""
+            id=""
+            cols="85"
+            rows="20"
+            value=""
+            placeholder="Add description..."
+          ></textarea>
+          <div class="update-cancel">
+            <button class="update-modal-update">UPDATE</button>
+          </div>
+        </div>
+      </div>
+      <div class="empty-tab" style="display: none">
+        <h1 style="color: white">Couldn't find any notes</h1>
+        <img src="./assets/Web 1366 – 1/search-image.png" alt="" />
+      </div>      
+    </div>
+    <script src="note-app.js"></script>
+  </body>
+</html>
