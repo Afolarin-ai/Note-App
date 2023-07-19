@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>NOTE APP</title>
+</head>
+<body>
+    <div class="sign-form">
+        <h2>NOTE APP</h2>
+        <p style="align-self: center;"> <scan class="login">Login</scan> or <scan class="Signup">Sign Up</a></p>
+        <form action=""  class="signup">
+            <label for="firstname">Firstname</label>
+            <input type="text" name="firstname" id="firstname">
+            <label for="lastname">Lastname</label>
+            <input type="text" name="lastname" id="lastname">
+            <label for="email">Email</label>
+            <input type="email" name="" id="">            
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password">
+            <label for="confirmpassword">Confirm Password</label>
+            <input type="password" name="confirmpassword" id="consfirmpassword">
+            <button>Sign Up</button>
+        </form>        
+        <form id="signin" action=""  class="signin">
+            <label for="email">Email</label>
+            <input type="email" name="" id="">            
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password">
+            <button>Sign in</button>
+            <a href="" style="align-self:flex-start; margin:30px 50px">Forgot Password</a>
+        </form>
+        <!-- <form action="" class="forgot-password">
+            <p>You will get a verfication pin</p>
+            <label for="">Email</label>
+            <input type="email" name="email" id="email">
+            <button>Send Eamil</button>
+        </form> -->
+    </div>
+    <script>
+        const login = document.querySelector(".login");
+        const loginPage = document.querySelector(".signin");
+        const signup = document.querySelector(".Signup")
+        const signupPage = document.querySelector(".signup");
+        login.addEventListener("click", function(){
+            loginPage.style.display = "flex";
+            signupPage.style.display = "none";
+        })
+        signup.addEventListener("click", function(){
+            loginPage.style.display = "none";
+            signupPage.style.display = "flex";
+        })
+    </script>
+</body>
+</html>

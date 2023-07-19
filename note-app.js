@@ -1,6 +1,6 @@
 const notebook = JSON.parse(localStorage.getItem("notebook")) || [];
 
-let note = { id: 1, title: "", description: "", date: "", category: "home" };
+let note = { id: 1, title: "", description: "", date: "", category: "home" , sataus:"pending"};
 
 const add_modal = document.querySelector(".add-modal-container");
 
@@ -17,6 +17,8 @@ const addNewNote = document.querySelector(".add-modal-add");
 let note_title = document.querySelector(".add-note-input");
 
 let note_content = document.querySelector(".description");
+
+let check_div = document.querySelector(".check");
 
 const update_modal = document.querySelector(".update-modal-container");
 
@@ -54,6 +56,10 @@ const allTab = document.querySelector(".all");
 
 const content = document.querySelector(".content");
 
+const checked = document.querySelector(".checked");
+
+const unchecked = document.querySelector(".unchecked");
+
 const checkTitle = document.querySelector(".check-title");
 
 const colors = ["orange", "blue", "green", "gray"];
@@ -61,6 +67,11 @@ const colors = ["orange", "blue", "green", "gray"];
 modal_activator.addEventListener("click", activateModal);
 
 close_modal.addEventListener("click", closeModal);
+
+const login = document.querySelector(".login");
+const loginPage = document.querySelector(".signin");
+const signup = document.querySelector(".Signup");
+const signupPage = document.querySelector(".signup");
 
 addNewNote.addEventListener("click", add_title);
 
@@ -74,7 +85,7 @@ tabs.forEach((tab, index) => {
     console.log("TABS", event.target.innerHTML.toLowerCase());
     const tabName = event.target.innerHTML.toLowerCase();
     const filteredData = notebook.filter(
-      (note, index) => note.category.toLowerCase() === tabName
+      (note) => note.category.toLowerCase() === tabName
     );
     content.innerHTML = `
    ${filteredData
@@ -91,7 +102,7 @@ tabs.forEach((tab, index) => {
           }'>
             <div class="check-title">
               <div class="check">
-                <img name = "checkbox" class src="./assets/Web 1366 – 1/empty-checkbox.png" alt="">
+                <img class = "unchecked" src="./assets/Web 1366 – 1/empty-checkbox.png" alt="">
                 <p class="note-title">${data.title}</p>
               </div>
               
@@ -109,7 +120,7 @@ tabs.forEach((tab, index) => {
               </div>
             </div>
             <p class="note-content">${data.description}</p>
-            <p class = "date">${data.date}</p>        
+            <p class="date">${data.date}</p>        
           </div>
         </div>
       </div>
@@ -145,6 +156,7 @@ function add_title() {
   const lastIndex = notebook.length - 1;
   lastItem = notebook.slice(lastIndex);
   note.id = lastItem?.[0]?.id + 1 || 1;
+  note.status = "pending";
   notebook.push(note);
   content.style.display = "block";
   const currentDate = new Date();
@@ -177,6 +189,7 @@ function add_title() {
   closeModal();
 }
 function add_date() {}
+
 allTab.addEventListener("click", (event) => {
   if (notebook.length < 1) {
     emptyNote.style.display = "flex";
@@ -197,7 +210,7 @@ allTab.addEventListener("click", (event) => {
           }'>
             <div class="check-title">
               <div class="check">
-                <img name="checkbox" src="./assets/Web 1366 – 1/empty-checkbox.png" alt="">
+                <img class = "unchecked" src="./assets/Web 1366 – 1/empty-checkbox.png" alt="">
                 <p class="note-title">${data.title}</p>
               </div>
               <div class="icons">
@@ -213,8 +226,7 @@ allTab.addEventListener("click", (event) => {
                 </button>
               </div>
             </div>
-            <p class="note-content">${data.description}</p>
-            <p class ="date">${data.date}</p>
+            <p class="note-content">${data.description}<p class ="date">${data.date}</p></p>           
           </div>
           </div>
         </div>
@@ -229,6 +241,7 @@ allTab.addEventListener("click", (event) => {
     allTab.style.color = "white";
   });
 });
+
 window.addEventListener("DOMContentLoaded", () => {
   if (notebook.length < 1) {
     emptyNote.style.display = "flex";
@@ -250,7 +263,7 @@ window.addEventListener("DOMContentLoaded", () => {
           }'>
             <div class="check-title">
               <div class="check">
-                <img name = "checkbox" src="./assets/Web 1366 – 1/empty-checkbox.png" alt="">
+                <img class = "unchecked" src="./assets/Web 1366 – 1/empty-checkbox.png" alt="">
                 <p class="note-title">${data.title}</p>
               </div>
               <div class="icons">
@@ -266,8 +279,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 </button>
               </div>
             </div>
-            <p class="note-content">${data.description}</p>
-            <p class="date">${data.date}</p>
+            <p class="note-content">${data.description}<p class="date">${data.date}</p></p>            
           </div>
           </div>
         </div>
@@ -297,28 +309,27 @@ content.addEventListener("click", (event) => {
   }
 });
 
-function updatenote(data) {
+function updatenote() {
   const updatedNote = notebook.map((todo) => {
     datum = {};
     if (Number(todo.id) === Number(note.id)) {
       datum = { ...todo, ...note };
+    } else {
+      datum = { ...todo, ...todo };
+      console.log("lo", datum);
     }
-    console.log("TODO", datum);
+
     return datum;
   });
   localStorage.setItem("notebook", JSON.stringify(updatedNote));
   window.location.reload();
 }
 
-function editNote(data){
+function editNote(data) {
   updateModalContent.value = data.description;
   updateModalTitle.value = data.title;
   updateNoteType.value = data.category;
   note = data;
-}
-
-function readNote() {
-  note.style.textDecoration = "lineThrough";
 }
 
 updateNote.addEventListener("click", updatenote);
@@ -397,7 +408,7 @@ function inputRun(event) {
         allTab.style.color = "white";
       });
     });
-    if(result == ""){
+    if (result == "") {
       alert("Note does not exist");
       window.location.reload();
     }
@@ -408,7 +419,8 @@ function hideIcon() {
   search_icon.style.display = "none";
 }
 
-{/* <button onclick="openModal()">Open Pop-up</button>
+
+  /* <button onclick="openModal()">Open Pop-up</button>
 
 <div id="myModal" class="modal">
   <div class="modal-content">
@@ -459,4 +471,35 @@ function openModal() {
 function closeModal() {
   var modal = document.getElementById("myModal");
   modal.style.display = "none";
-} */}
+} */
+
+
+// const person = {
+//   name: ["Bob", "Smith"],
+//   age: 32,
+// };
+
+// function logProperty(propertyName) {
+//   console.log(person[propertyName]);
+// }
+
+// logProperty("name");
+// // ["Bob", "Smith"]
+// logProperty("age");
+// // 32
+// person.age = 45;
+// person["name"]["last"] = "Cratchit";
+// person.age;
+// person["name"]["last"];
+// person["eyes"] = "hazel";
+// person.farewell = function () {
+//   console.log("Bye everybody!");
+// };
+// person["eyes"];
+// person.farewell();
+
+// const myDataName = "height";
+// const myDataValue = "1.75m";
+// person[myDataName] = myDataValue;
+// console.log(person.height);
+// console.log(person["height"]);
