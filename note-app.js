@@ -305,6 +305,11 @@ allTab.addEventListener("click", (event) => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
+  if(notebook.length < 1){
+    emptyNote.style.display = "flex"
+  }
+  else{
+    emptyNote.style.display = "none"
     content.innerHTML = `
    ${notebook
      .map(
@@ -336,6 +341,7 @@ window.addEventListener("DOMContentLoaded", () => {
      )
      .join(" ")}
   `;
+  }
 });
 
 content.addEventListener("click", (event) => {
