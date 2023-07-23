@@ -117,6 +117,16 @@ body{
     font-weight: 200;
     opacity: 0.2;
 }
+.empty-tab{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.empty-tab h1{
+    font-weight: 200;
+    opacity: 0.2;
+}
 .add-modal-container{
     background-color: rgb(0,0,0,0.1);
     display: flex;
@@ -263,9 +273,11 @@ hr{
 .update-note-description{
     margin-left: 20px;
     padding:10px;
-    resize:none;
+    resize:both;
     border:1px solid rgb(0,0,0,0.3);
     outline:none;
+    height:300px;
+    width:500px;
 }
 .dropdown-button{
     width:100%;
@@ -372,7 +384,6 @@ input[type="checkbox"]{
     margin-bottom: 20px;
     position: relative;
     margin-right: 20px;
-    overflow-x: hidden;
     overflow-y: auto;
 }
 .note-title{
@@ -388,7 +399,7 @@ input[type="checkbox"]{
     max-width: 370px;
     font-weight: 100;
     overflow-wrap: break-word;
-    white-space: pre;
+    white-space:break-spaces;
     line-height:25px;
 }
 @media screen and (max-width: 820px){
@@ -416,10 +427,6 @@ input[type="checkbox"]{
     display:block;
     margin:auto;
 }
-.read{
-    text-decoration: line-through;
-    background-color: gray;
-}
 .empty-tab{
     margin:auto;
 }
@@ -432,19 +439,6 @@ input[type="checkbox"]{
 .date{
     position: absolute;
     bottom: 0;
-    left:20px;
-}
-/* .checked{
-    display: none;
-} */
-.unchecked{
-    display: block;
-}
-.on{
-    display: block;
-}
-.off{
-    display:block;
 }
 .signup {
     display: flex;
@@ -454,7 +448,7 @@ input[type="checkbox"]{
 }
 .signup button{
     width:150px;
-    height:50px;
+    padding:15px;
     background-color: #111;
     color:white;
     border-radius: 5px;
@@ -506,7 +500,7 @@ input[type="checkbox"]{
 }
 .signin button{
     width:150px;
-    height:50px;
+    padding:15px;
     background-color: #111;
     color:white;
     border-radius: 5px;
@@ -542,4 +536,25 @@ input[type="checkbox"]{
     color: #0000ff;
     text-decoration: underline;
     cursor: pointer;
+}
+.show_password{
+    display: flex;
+    flex-direction: row-reverse;
+}
+.show_password:first-child{
+    margin:0;
+}
+.show_password:last-child{
+    margin:0;
+}
+.forgot-password{
+    margin-top: 10px;
+    float:left;
+}
+.counter{
+    font-size: larger;
+    font-weight: 500;
+}
+.completion-notification{
+
 }

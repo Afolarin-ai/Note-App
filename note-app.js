@@ -1,6 +1,13 @@
 const notebook = JSON.parse(localStorage.getItem("notebook")) || [];
-
-let note = { id: 1, title: "", description: "", date: "", category: "home" , sataus:"pending"};
+const checkboxState = JSON.parse(localStorage.getItem("status"));
+let note = {
+  id: 1,
+  title: "",
+  description: "",
+  date: "",
+  category: "home",
+  status: "pending",
+};
 
 const add_modal = document.querySelector(".add-modal-container");
 
@@ -52,15 +59,17 @@ const noteTitle = document.querySelector(".note-title");
 
 const tabs = document.querySelectorAll(".tab");
 
+const emptyTab = document.querySelector(".empty-tab")
+
 const allTab = document.querySelector(".all");
 
 const content = document.querySelector(".content");
 
-const checked = document.querySelector(".checked");
-
-const unchecked = document.querySelector(".unchecked");
+const noteChecker = document.querySelector(".checker");
 
 const checkTitle = document.querySelector(".check-title");
+
+const counter = document.querySelector(".counter");
 
 const colors = ["orange", "blue", "green", "gray"];
 
@@ -87,47 +96,75 @@ tabs.forEach((tab, index) => {
     const filteredData = notebook.filter(
       (note) => note.category.toLowerCase() === tabName
     );
-    content.innerHTML = `
-   ${filteredData
-     .map(
-       (data) =>
-         `
-         <div class = "content">
-          <div class="note"  style = 'background-color: ${
-            data.category === "home"
-              ? colors[0]
-              : data.category === "work"
-              ? colors[1]
-              : colors[2]
+    if(filteredData.length < 1){
+      emptyTab.style.display = "flex";
+      emptyNote.style.display = "none"
+    }
+    else{
+      content.innerHTML = `
+    ${filteredData
+      .map(
+        (data) =>
+          `
+            <div class="note"  style = 'background-color: ${
+              data.status === "read"
+                ? "gray"
+                : data.category === "home"
+                ? colors[0]
+                : data.category === "work"
+                ? colors[1]
+                : colors[2]
+            }; text-decoration:${
+            data.status === "pending"
+              ? "none"
+              : data.status === "read"
+              ? "line-through"
+              : ""
           }'>
-            <div class="check-title">
-              <div class="check">
-                <img class = "unchecked" src="./assets/Web 1366 – 1/empty-checkbox.png" alt="">
-                <p class="note-title">${data.title}</p>
+              <div class="check-title">
+                <div class="check">
+                  <img src=${
+                    data.status === "pending"
+                      ? "./assets/imagws/empty-checkbox.png"
+                      : data.status === "read"
+                      ? "./assets/imagws/fill-checkbox.png"
+                      : ""
+                  } alt="" name = ${
+            data.status === "pending"
+              ? "checker"
+              : data.status === "read"
+              ? "checked"
+              : ""
+          }>
+                  <p class="note-title">${data.title}</p>
+                </div>
+                <div class="icons">
+                  <button class="editNote" onclick='editNote(${JSON.stringify(
+                    data
+                  )})'>
+                    <img name='edit' src="./assets/imagws/edit.png" alt="" />
+                  </button>
+                  <button class="trash" onclick='deleteNote(${JSON.stringify(
+                    data
+                  )})'>
+                    <img src="./assets/imagws/trash.png" alt="" />
+                  </button>
+                </div>
               </div>
-              
-              <div class="icons"> <!--style='z-index: 10000'-->
-                 <button class="editNote" onclick='editNote(${JSON.stringify(
-                   data
-                 )})'>
-                <img name='edit' src="./assets/Web 1366 – 1/edit.png" alt="" />
-              </button>
-              <button class="trash" onclick='deleteNote(${JSON.stringify(
-                data
-              )})'>
-                <img src="./assets/Web 1366 – 1/trash.png" alt="" />
-              </button>
-              </div>
+              <div><p class="note-content">${data.description}</p></div>
+              <p class="date" style = 'text-decoration:${
+                data.status === "pending"
+                  ? "none"
+                  : data.status === "read"
+                  ? "line-through"
+                  : ""
+              }'>${data.date}</p>            
             </div>
-            <p class="note-content">${data.description}</p>
-            <p class="date">${data.date}</p>        
-          </div>
-        </div>
-      </div>
-    `
-     )
-     .join(" ")}
-  `;
+      `
+      )
+      .join(" ")}
+    `;
+    }
     console.log(filteredData, "FILTERED");
     tabs.forEach((tab) => {
       tab.classList.remove("active");
@@ -193,6 +230,7 @@ function add_date() {}
 allTab.addEventListener("click", (event) => {
   if (notebook.length < 1) {
     emptyNote.style.display = "flex";
+    emptyTab.style.display = "none";
   } else {
     emptyNote.style.display = "none";
     content.innerHTML = `
@@ -200,36 +238,60 @@ allTab.addEventListener("click", (event) => {
      .map(
        (data) =>
          `
-        <div class = "content">
           <div class="note"  style = 'background-color: ${
-            data.category === "home"
+            data.status === "read"
+              ? "gray"
+              : data.category === "home"
               ? colors[0]
               : data.category === "work"
               ? colors[1]
               : colors[2]
-          }'>
+          }; text-decoration:${
+           data.status === "pending"
+             ? "none"
+             : data.status === "read"
+             ? "line-through"
+             : ""
+         }'>
             <div class="check-title">
               <div class="check">
-                <img class = "unchecked" src="./assets/Web 1366 – 1/empty-checkbox.png" alt="">
+                <img src=${
+                  data.status === "pending"
+                    ? "./assets/imagws/empty-checkbox.png"
+                    : data.status === "read"
+                    ? "./assets/imagws/fill-checkbox.png"
+                    : ""
+                } alt="" name = ${
+           data.status === "pending"
+             ? "checker"
+             : data.status === "read"
+             ? "checked"
+             : ""
+         }>
                 <p class="note-title">${data.title}</p>
               </div>
               <div class="icons">
                 <button class="editNote" onclick='editNote(${JSON.stringify(
                   data
                 )})'>
-                  <img name='edit' src="./assets/Web 1366 – 1/edit.png" alt="" />
+                  <img name='edit' src="./assets/imagws/edit.png" alt="" />
                 </button>
                 <button class="trash" onclick='deleteNote(${JSON.stringify(
                   data
                 )})'>
-                  <img src="./assets/Web 1366 – 1/trash.png" alt="" />
+                  <img src="./assets/imagws/trash.png" alt="" />
                 </button>
               </div>
             </div>
-            <p class="note-content">${data.description}<p class ="date">${data.date}</p></p>           
+            <p class="note-content">${data.description}</p>
+            <p class="date" style = 'text-decoration:${
+              data.status === "pending"
+                ? "none"
+                : data.status === "read"
+                ? "line-through"
+                : ""
+            }'>${data.date}</p>            
           </div>
-          </div>
-        </div>
     `
      )
      .join(" ")}
@@ -243,72 +305,142 @@ allTab.addEventListener("click", (event) => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
-  if (notebook.length < 1) {
-    emptyNote.style.display = "flex";
-  } else {
-    emptyNote.style.display = "none";
-
     content.innerHTML = `
    ${notebook
      .map(
        (data) =>
          `
-        <div class = "content">
-          <div class="note"  style = 'background-color: ${
-            data.category === "home"
-              ? colors[0]
-              : data.category === "work"
-              ? colors[1]
-              : colors[2]
-          }'>
+          <div class="note"  style = 'background-color: ${data.status === "read"? "gray": data.category === "home"? colors[0]: data.category === "work"? colors[1]: colors[2]}; text-decoration:${data.status === "pending"? "none": data.status === "read"? "line-through": ""}'>
             <div class="check-title">
               <div class="check">
-                <img class = "unchecked" src="./assets/Web 1366 – 1/empty-checkbox.png" alt="">
+                <img src=${data.status === "pending"? "./assets/imagws/empty-checkbox.png": data.status === "read"? "./assets/imagws/fill-checkbox.png": ""} alt="" name = ${data.status === "pending"? "checker": data.status === "read" ? "checked": ""}>
                 <p class="note-title">${data.title}</p>
               </div>
               <div class="icons">
                 <button class="editNote" onclick='editNote(${JSON.stringify(
                   data
                 )})'>
-                  <img name='edit' src="./assets/Web 1366 – 1/edit.png" alt="" />
+                  <img name='edit' src="./assets/imagws/edit.png" alt="" />
                 </button>
                 <button class="trash" onclick='deleteNote(${JSON.stringify(
                   data
                 )})'>
-                  <img src="./assets/Web 1366 – 1/trash.png" alt="" />
+                  <img src="./assets/imagws/trash.png" alt="" />
                 </button>
               </div>
             </div>
-            <p class="note-content">${data.description}<p class="date">${data.date}</p></p>            
+            <p class="note-content">${data.description}</p>
+            <p class="date" style = 'text-decoration:${ data.status === "pending" ? "none" : data.status === "read"? "line-through": ""}'>${data.date}</p>            
           </div>
-          </div>
-        </div>
     `
      )
      .join(" ")}
   `;
-  }
 });
 
 content.addEventListener("click", (event) => {
   const tagName = event.target.name;
   if (tagName === "edit") {
     update_modal.classList.add(["modal-activated"]);
-  } else if (tagName === "checkbox") {
-    event.target.src =
-      "http://127.0.0.1:5500/assets/Web%201366%20%E2%80%93%201/fill-checkbox.png";
-    event.target.name = "fill-checkbox";
-    noteCard.classList.add(".read-note");
-    console.log(noteCard);
-  } else if (tagName === "fill-checkbox") {
-    event.target.src =
-      "http://127.0.0.1:5500/assets/Web%201366%20%E2%80%93%201/empty-checkbox.png";
-    event.target.name = "checkbox";
-    noteCard.classList.remove(".read-note");
-    console.log(noteCard);
+  }
+  if (event.target.name === "checker") {
+    let x = event.target.parentElement.querySelector("p").textContent;
+    let p = {};
+    z = {};
+    for (let i = 0; i < notebook.length; i++) {
+      if (x === notebook[i].title) {
+        p = notebook[i];
+        p.status = "read";
+        event.target.checked = true;
+      }
+    }
+    const updatedNote = notebook.map((z) => {
+      datum = {};
+      if (Number(z.id) === Number(note.id)) {
+        datum = { ...note, ...z };
+      } else {
+        datum = { ...z, ...z };
+      }
+      return datum;
+    });
+    console.log(updatedNote);
+    localStorage.setItem("notebook", JSON.stringify(updatedNote));
+    window.location.reload()
+
+  }
+  else if (event.target.name === "checked") {
+    let x = event.target.parentElement.querySelector("p").textContent;
+    let p = {};
+    z = {};
+    for (let i = 0; i < notebook.length; i++) {
+      if (x === notebook[i].title) {
+        p = notebook[i];
+        p.status = "pending";
+      }
+    }
+    const updatedNote = notebook.map((z) => {
+      datum = {};
+      if (Number(z.id) === Number(note.id)) {
+        datum = {...note, ...z};
+      } else {
+        datum = { ...z, ...z };
+      }
+      return datum;
+    });
+    console.log(updatedNote);
+    z
+    localStorage.setItem("notebook", JSON.stringify(updatedNote));
+    window.location.reload()
   }
 });
-
+// function add(event) {
+//   let x = event.target.parentElement.querySelector("p").textContent;
+//   let p = {};
+//   z = {};
+//   for (let i = 0; i < notebook.length; i++) {
+//     if (x === notebook[i].title) {
+//       p = notebook[i];
+//       p.status = "read";
+//     }
+//   }
+//   const updatedNote = notebook.map((z) => {
+//     datum = {};
+//     if (Number(z.id) === Number(note.id)) {
+//       datum = { ...note, ...z };
+//     } else {
+//       datum = { ...z, ...z};
+//     }
+//     return datum;
+//   });
+//   console.log(updatedNote)
+//   localStorage.setItem("notebook", JSON.stringify(updatedNote));
+// }
+// function remove(event) {
+//   let x = event.target.parentElement.querySelector("p").textContent;
+//   let p = {};
+//   z = {};
+//   for (let i = 0; i < notebook.length; i++) {
+//     if (x === notebook[i].title) {
+//       console.log("true");
+//       p = notebook[i];
+//       p.status = "pending";
+//       z = { ...notebook[i], ...p };
+//       break;
+//     }
+//   }
+//   console.log(z);
+//   const updatedNote = notebook.map((z) => {
+//     datum = {};
+//     if (Number(z.id) === Number(note.id)) {
+//       datum = { ...note, ...z };
+//     } else {
+//       datum = { ...z, ...z };
+//     }
+//     return datum;
+//   });
+//   console.log(updatedNote);
+//   localStorage.setItem("notebook", JSON.stringify(updatedNote));
+// }
 function updatenote() {
   const updatedNote = notebook.map((todo) => {
     datum = {};
@@ -318,11 +450,11 @@ function updatenote() {
       datum = { ...todo, ...todo };
       console.log("lo", datum);
     }
-
     return datum;
   });
   localStorage.setItem("notebook", JSON.stringify(updatedNote));
-  window.location.reload();
+  // window.location.reload();
+  update_modal.classList.remove("modal-activated");
 }
 
 function editNote(data) {
@@ -368,7 +500,9 @@ function inputRun(event) {
          `
         <div class = "content">
           <div class="note"  style = 'background-color: ${
-            data.category === "home"
+            data.status === "read"
+              ? "gray"
+              : data.category === "home"
               ? colors[0]
               : data.category === "work"
               ? colors[1]
@@ -419,87 +553,12 @@ function hideIcon() {
   search_icon.style.display = "none";
 }
 
-
-  /* <button onclick="openModal()">Open Pop-up</button>
-
-<div id="myModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <p>This is a custom pop-up message!</p>
-  </div>
-</div>
-
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+const allNotesAmount = notebook.length;
+const tasksDone = notebook.filter((note) => note.status === "read").length;
+if(allNotesAmount === tasksDone){
+  counter.innerHTML = `You have completed all notes`;
 }
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
+if(allNotesAmount === 0){
+  counter.style.display = "none";
 }
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-function openModal() {
-  var modal = document.getElementById("myModal");
-  modal.style.display = "block";
-}
-
-function closeModal() {
-  var modal = document.getElementById("myModal");
-  modal.style.display = "none";
-} */
-
-
-// const person = {
-//   name: ["Bob", "Smith"],
-//   age: 32,
-// };
-
-// function logProperty(propertyName) {
-//   console.log(person[propertyName]);
-// }
-
-// logProperty("name");
-// // ["Bob", "Smith"]
-// logProperty("age");
-// // 32
-// person.age = 45;
-// person["name"]["last"] = "Cratchit";
-// person.age;
-// person["name"]["last"];
-// person["eyes"] = "hazel";
-// person.farewell = function () {
-//   console.log("Bye everybody!");
-// };
-// person["eyes"];
-// person.farewell();
-
-// const myDataName = "height";
-// const myDataValue = "1.75m";
-// person[myDataName] = myDataValue;
-// console.log(person.height);
-// console.log(person["height"]);
+counter.innerHTML = `You have ${tasksDone}/${allNotesAmount} notes completed`;

@@ -27,16 +27,14 @@
             <label for="email">Email</label>
             <input type="email" name="" id="">            
             <label for="password">Password</label>
-            <input type="password" name="password" id="password">
+            <input type="password" name="password" id="password" class="password">
+            <div class="show_password">
+                <label for="show-password">Show Password</label>
+                <input type="checkbox" name="show_password" class="show-password" onclick="myFunction()">
+            </div>
             <button>Sign in</button>
-            <a href="" style="align-self:flex-start; margin:30px 50px">Forgot Password</a>
+            <a href="" class="forgot-password">Forgot Password</a>
         </form>
-        <!-- <form action="" class="forgot-password">
-            <p>You will get a verfication pin</p>
-            <label for="">Email</label>
-            <input type="email" name="email" id="email">
-            <button>Send Eamil</button>
-        </form> -->
     </div>
     <script>
         const login = document.querySelector(".login");
@@ -51,6 +49,14 @@
             loginPage.style.display = "none";
             signupPage.style.display = "flex";
         })
+        function myFunction() {
+            const x = document.querySelector(".password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
     </script>
 </body>
 </html>
