@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,19 +14,22 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
       <div class="search">
         <i class="fas fa-search search-icon"></i>
-          <input
+        <input
           class="search-input"
           type="text"
           name="search-notes"
           id="search-notes-inp"
-          placeholder="           Search notes...";
-          value = "";
-          />
+          placeholder="           Search notes..."
+          ;
+          value=""
+          ;
+        />
       </div>
       <div class="below-input">
         <div class="tab-container">
@@ -45,12 +47,8 @@
           alt="add-note-illustration"
         />
       </div>
-      <div class="content">
-        <div class="note">
-          <p class="note-content"></p>
-          <p class="date"></p>
-        </div>
-      </div>
+      <div class="completion-notification"><p class="counter"></p></div>
+      <div class="content"></div>
       <div class="add-modal-container">
         <div class="add-note-modal">
           <h1 class="add-note">Add note</h1>
@@ -72,7 +70,6 @@
               </select>
             </div>
           </div>
-
           <textarea
             class="description"
             name=""
@@ -125,9 +122,9 @@
         </div>
       </div>
       <div class="empty-tab" style="display: none">
-        <h1 style="color: white">Couldn't find any notes</h1>
-        <img src="./assets/Web 1366 – 1/search-image.png" alt="" />
-      </div>      
+        <h1 style="color: black">Couldn't find any notes</h1>
+        <img src="./assets/imagws/search-image.png" alt="" />
+      </div>
     </div>
     <script src="note-app.js"></script>
   </body>
