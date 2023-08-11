@@ -43,6 +43,10 @@ const modal_activator = document.querySelector(".add-note-button");
 
 const icons = document.querySelector(".icons");
 
+const colored = document.querySelector(".colored");
+
+const progressBar = document.querySelector(".progress-bar");
+
 const edit = document.querySelector(".editNote");
 
 let add_note_type = document.querySelector(".add-note-type");
@@ -59,7 +63,7 @@ const noteTitle = document.querySelector(".note-title");
 
 const tabs = document.querySelectorAll(".tab");
 
-const emptyTab = document.querySelector(".empty-tab")
+const emptyTab = document.querySelector(".empty-tab");
 
 const allTab = document.querySelector(".all");
 
@@ -91,17 +95,17 @@ let title;
 tabs.forEach((tab, index) => {
   tab.addEventListener("click", (event) => {
     event.preventDefault();
-    console.log("TABS", event.target.innerHTML.toLowerCase());
     const tabName = event.target.innerHTML.toLowerCase();
     const filteredData = notebook.filter(
       (note) => note.category.toLowerCase() === tabName
     );
+    console.log(filteredData.length)
     if(filteredData.length < 1){
-      emptyTab.style.display = "flex";
+      emptyTab.style.display = "flex"
       emptyNote.style.display = "none"
     }
-    else{
-      content.innerHTML = `
+    else{emptyTab.style.display = "none"}
+    content.innerHTML = `
     ${filteredData
       .map(
         (data) =>
@@ -164,15 +168,12 @@ tabs.forEach((tab, index) => {
       )
       .join(" ")}
     `;
-    }
-    console.log(filteredData, "FILTERED");
     tabs.forEach((tab) => {
       tab.classList.remove("active");
       allTab.style.backgroundColor = "transparent";
       allTab.style.color = "black";
     });
     tab.classList.add("active", `tab${index + 1}`);
-    console.log("TABS", notebook);
   });
 });
 function activateModal() {
@@ -226,12 +227,12 @@ function add_title() {
   closeModal();
 }
 function add_date() {}
-
 allTab.addEventListener("click", (event) => {
   if (notebook.length < 1) {
     emptyNote.style.display = "flex";
     emptyTab.style.display = "none";
   } else {
+    emptyTab.style.display = "none";
     emptyNote.style.display = "none";
     content.innerHTML = `
    ${notebook
@@ -303,22 +304,48 @@ allTab.addEventListener("click", (event) => {
     allTab.style.color = "white";
   });
 });
-
 window.addEventListener("DOMContentLoaded", () => {
-  if(notebook.length < 1){
-    emptyNote.style.display = "flex"
-  }
-  else{
-    emptyNote.style.display = "none"
+  if (notebook.length < 1) {
+    emptyNote.style.display = "flex";
+  } else {
+    emptyNote.style.display = "none";
     content.innerHTML = `
    ${notebook
      .map(
        (data) =>
          `
-          <div class="note"  style = 'background-color: ${data.status === "read"? "gray": data.category === "home"? colors[0]: data.category === "work"? colors[1]: colors[2]}; text-decoration:${data.status === "pending"? "none": data.status === "read"? "line-through": ""}'>
+          <div class="note"  style = 'background-color: ${
+            data.status === "read"
+              ? "gray"
+              : data.category === "home"
+              ? colors[0]
+              : data.category === "work"
+              ? colors[1]
+              : data.category === "Select "
+              ? colors[1]
+              : colors[2]
+          }; text-decoration:${
+           data.status === "pending"
+             ? "none"
+             : data.status === "read"
+             ? "line-through"
+             : ""
+         }'>
             <div class="check-title">
               <div class="check">
-                <img src=${data.status === "pending"? "./assets/imagws/empty-checkbox.png": data.status === "read"? "./assets/imagws/fill-checkbox.png": ""} alt="" name = ${data.status === "pending"? "checker": data.status === "read" ? "checked": ""}>
+                <img src=${
+                  data.status === "pending"
+                    ? "./assets/imagws/empty-checkbox.png"
+                    : data.status === "read"
+                    ? "./assets/imagws/fill-checkbox.png"
+                    : ""
+                } alt="" name = ${
+           data.status === "pending"
+             ? "checker"
+             : data.status === "read"
+             ? "checked"
+             : ""
+         }>
                 <p class="note-title">${data.title}</p>
               </div>
               <div class="icons">
@@ -335,7 +362,13 @@ window.addEventListener("DOMContentLoaded", () => {
               </div>
             </div>
             <p class="note-content">${data.description}</p>
-            <p class="date" style = 'text-decoration:${ data.status === "pending" ? "none" : data.status === "read"? "line-through": ""}'>${data.date}</p>            
+            <p class="date" style = 'text-decoration:${
+              data.status === "pending"
+                ? "none"
+                : data.status === "read"
+                ? "line-through"
+                : ""
+            }'>${data.date}</p>            
           </div>
     `
      )
@@ -343,13 +376,12 @@ window.addEventListener("DOMContentLoaded", () => {
   `;
   }
 });
-
 content.addEventListener("click", (event) => {
   const tagName = event.target.name;
   if (tagName === "edit") {
     update_modal.classList.add(["modal-activated"]);
   }
-  if (event.target.name === "checker") {
+  if (event.target.name === "checker"){
     let x = event.target.parentElement.querySelector("p").textContent;
     let p = {};
     z = {};
@@ -357,7 +389,6 @@ content.addEventListener("click", (event) => {
       if (x === notebook[i].title) {
         p = notebook[i];
         p.status = "read";
-        event.target.checked = true;
       }
     }
     const updatedNote = notebook.map((z) => {
@@ -371,10 +402,8 @@ content.addEventListener("click", (event) => {
     });
     console.log(updatedNote);
     localStorage.setItem("notebook", JSON.stringify(updatedNote));
-    window.location.reload()
-
-  }
-  else if (event.target.name === "checked") {
+    window.location.reload();
+  } else if (event.target.name === "checked") {
     let x = event.target.parentElement.querySelector("p").textContent;
     let p = {};
     z = {};
@@ -387,66 +416,18 @@ content.addEventListener("click", (event) => {
     const updatedNote = notebook.map((z) => {
       datum = {};
       if (Number(z.id) === Number(note.id)) {
-        datum = {...note, ...z};
+        datum = { ...note, ...z };
       } else {
         datum = { ...z, ...z };
       }
       return datum;
     });
     console.log(updatedNote);
-    z
+    z;
     localStorage.setItem("notebook", JSON.stringify(updatedNote));
-    window.location.reload()
+    window.location.reload();
   }
 });
-// function add(event) {
-//   let x = event.target.parentElement.querySelector("p").textContent;
-//   let p = {};
-//   z = {};
-//   for (let i = 0; i < notebook.length; i++) {
-//     if (x === notebook[i].title) {
-//       p = notebook[i];
-//       p.status = "read";
-//     }
-//   }
-//   const updatedNote = notebook.map((z) => {
-//     datum = {};
-//     if (Number(z.id) === Number(note.id)) {
-//       datum = { ...note, ...z };
-//     } else {
-//       datum = { ...z, ...z};
-//     }
-//     return datum;
-//   });
-//   console.log(updatedNote)
-//   localStorage.setItem("notebook", JSON.stringify(updatedNote));
-// }
-// function remove(event) {
-//   let x = event.target.parentElement.querySelector("p").textContent;
-//   let p = {};
-//   z = {};
-//   for (let i = 0; i < notebook.length; i++) {
-//     if (x === notebook[i].title) {
-//       console.log("true");
-//       p = notebook[i];
-//       p.status = "pending";
-//       z = { ...notebook[i], ...p };
-//       break;
-//     }
-//   }
-//   console.log(z);
-//   const updatedNote = notebook.map((z) => {
-//     datum = {};
-//     if (Number(z.id) === Number(note.id)) {
-//       datum = { ...note, ...z };
-//     } else {
-//       datum = { ...z, ...z };
-//     }
-//     return datum;
-//   });
-//   console.log(updatedNote);
-//   localStorage.setItem("notebook", JSON.stringify(updatedNote));
-// }
 function updatenote() {
   const updatedNote = notebook.map((todo) => {
     datum = {};
@@ -459,39 +440,31 @@ function updatenote() {
     return datum;
   });
   localStorage.setItem("notebook", JSON.stringify(updatedNote));
-  // window.location.reload();
+  window.location.reload();
   update_modal.classList.remove("modal-activated");
 }
-
 function editNote(data) {
   updateModalContent.value = data.description;
   updateModalTitle.value = data.title;
   updateNoteType.value = data.category;
   note = data;
 }
-
 updateNote.addEventListener("click", updatenote);
-
 function deleteNote(data) {
   const dataLeft = notebook.filter((note) => note.id !== data.id);
   localStorage.setItem("notebook", JSON.stringify(dataLeft));
   window.location.reload();
 }
-
 updateModalContent.addEventListener("change", (e) => {
   note.description = e.target.value;
 });
-
 updateModalTitle.addEventListener("change", (e) => {
   note.title = e.target.value;
 });
-
 updateNoteType.addEventListener("change", (e) => {
   note.category = e.target.value;
 });
-
 search_notes.addEventListener("keydown", inputRun);
-
 function inputRun(event) {
   if (event.key === "Enter") {
     const result = notebook.filter(
@@ -558,13 +531,16 @@ search_notes.addEventListener("focus", hideIcon);
 function hideIcon() {
   search_icon.style.display = "none";
 }
-
 const allNotesAmount = notebook.length;
 const tasksDone = notebook.filter((note) => note.status === "read").length;
-if(allNotesAmount === tasksDone){
+if (allNotesAmount === tasksDone) {
   counter.innerHTML = `You have completed all notes`;
 }
-if(allNotesAmount === 0){
+if (allNotesAmount === 0) {
   counter.style.display = "none";
+  progressBar.style.display = "none";
 }
+const percentage = (tasksDone/allNotesAmount)*100;
 counter.innerHTML = `You have ${tasksDone}/${allNotesAmount} notes completed`;
+console.log(percentage)
+colored.style.width = `${percentage}%`;
